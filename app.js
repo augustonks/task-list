@@ -15,5 +15,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 app.listen(port, () =>
-  console.log(`server aberto em http://localhost:${port}/`)
+    console.log(`server aberto em http://localhost:${port}/`)
 );

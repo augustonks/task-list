@@ -1,33 +1,71 @@
 const Task = require("../models/Task");
 
 const getAllTasks = async (req, res) => {
-  try {
-    const taskList = await Task.find();
-    return res.render("index", { taskList });
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
+    try {
+        const taskList = await Task.find();
+        return res.render("index", { taskList, task: null, taskDelete: null });
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
 };
 
 const createTask = async (req, res) => {
-  const task = req.body;
+    const task = req.body;
 
-  console.log(task);
+    console.log(task);
 
-  if (!task.task) {
-    console.log("redirect");
-    return res.redirect("/");
-  }
+    if (!task.task) {
+        console.log("redirect");
+        return res.redirect("/");
+    }
 
-  try {
-    await Task.create(task);
-    return res.redirect("/");
-  } catch (err) {
-    res.status(500).send({ error: err.message });
-  }
+    try {
+        await Task.create(task);
+        return res.redirect("/");
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
+};
+
+const getById = async (req, res) => {
+    try {
+        const taskList = await Task.find();
+
+        if (req.params.method == "update") {
+            const task = await Task.findById(req.params.id);
+            res.render("index", { taskList, task, taskDelete: null });
+        } else {
+            const taskDelete = await Task.findById(req.params.id);
+            res.render("index", { taskList, task: null, taskDelete });
+        }
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
+};
+
+const updateTask = async (req, res) => {
+    try {
+        const task = req.body;
+        await Task.updateOne({ _id: req.params.id }, task);
+        res.redirect("/");
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
+};
+
+const deleteTask = async (req, res) => {
+    try {
+        await Task.deleteOne({ task: req.params.task });
+        res.redirect("/");
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
 };
 
 module.exports = {
-  getAllTasks,
-  createTask,
+    getAllTasks,
+    createTask,
+    getById,
+    updateTask,
+    deleteTask,
 };

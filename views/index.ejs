@@ -1,23 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-    <form action="/create" method="post">
-        <input type="text" name="task" id="task" placeholder="Inserir nova tarefa">
-        <button id="addButton" type="submit">Adicionar</button>
-    </form>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Task List</title>
+        <!-- <link rel="stylesheet" href="style.css"> -->
+    </head>
+    <body>
+        <header>
+            <% if (task == null) {%>
 
-    <ul>
-        <% taskList.forEach((task) => {%>
-            <li><%= task.task %> | <%= task.date.toLocaleDateString("pt-BR") %></li>
-        <% }) %>
-    </ul>
+            <form action="/create" method="post">
+                <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    placeholder="Inserir nova tarefa"
+                />
+                <button id="addButton" type="submit">Adicionar</button>
+            </form>
 
-</body>
+            <%} else { %>
+
+            <form action="/update/<%= task._id %>" method="post">
+                <input
+                    type="text"
+                    name="task"
+                    id="task"
+                    value="<%= task.task %>"
+                />
+                <button id="addButton" type="submit">Atualizar</button>
+            </form>
+
+            <% } %>
+        </header>
+        <section>
+            <ul>
+                <% taskList.forEach((loop_task) => {%>
+                <li>
+                    <%= loop_task.task %> | <%=
+                    loop_task.date.toLocaleDateString("pt-BR") %>
+                </li>
+                <a href="/getById/<%= loop_task._id %>/update">Editar</a>
+                <a href="/getById/<%= loop_task._id %>/delete">Apagar</a>
+                <% }) %>
+            </ul>
+        </section>
+
+        <% if(taskDelete != null) {%>
+
+        <section id="modal">
+            <div id="card">
+                <a href="/">x</a>
+                <h2>Confirmação</h2>
+                <hr />
+                <p>Deseja apagar a tarefa "<%= taskDelete.task %>"?</p>
+                <a href="/">Não</a>
+                <a href="/delete/<%= taskDelete.task %>">Sim</a>
+            </div>
+        </section>
+
+        <% } %>
+    </body>
 </html>
