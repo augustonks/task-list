@@ -1,0 +1,14 @@
+<section id="modal">
+    <div id="card">
+        <div id="window-head">
+            <h2>Confirmação</h2>
+            <a id="close-btn" href="/"><i class="bi bi-x"></i></a>
+        </div>
+        <hr />
+        <p>Deseja realmente apagar a tarefa "<%= taskDelete.task %>"?</p>
+        <div id="btns">
+            <a id="btn-not" href="/">Não</a>
+            <a id="btn-yes" href="/delete/<%= taskDelete._id %>">Sim</a>
+        </div>
+    </div>
+</section>

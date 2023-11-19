@@ -12,92 +12,30 @@
         />
     </head>
     <body>
+        <!-- Mensagens de sucesso ou fracasso-->
         <% if (message != "") { %>
-        <section class="message message-<%= type %>">
-            <p><%= message %></p>
-            <span id="close-message"><i class="bi bi-x"></i></span>
-        </section>
+            <%- include("./components/message"), {message: message, type: type}%>
         <% } %>
-
-        <header>
+        <!--Formulário adicionar/editar tarefas--> 
+        <header> 
             <% if (task == null) {%>
-            <h1>TASK LIST</h1>
-            <form action="/create" method="post">
-                <input
-                    type="text"
-                    name="task"
-                    id="task"
-                    placeholder="Inserir nova tarefa"
-                />
-                <button id="add-button" type="submit">Adicionar</button>
-            </form>
+                <%- include("./components/taskForm", {formTitle: "TO DO LIST", action:"create", placeholder: "Insira uma nova tarefa", value: "", btnId: "add-button", actionBtn: "Adicionar"})%>
 
             <%} else { %>
-            <h1>UPDATE TASK</h1>
-            <form action="/update/<%= task._id %>" method="post">
-                <input
-                    type="text"
-                    name="task"
-                    id="task"
-                    value="<%= task.task %>"
-                />
-                <button id="update-button" type="submit">Atualizar</button>
-            </form>
-
+                <%- include("./components/taskForm", {formTitle: "UPDATE TASK", action:`update/${task._id}`, placeholder: "Insira um novo valor", value: task.task, btnId: "update-button", actionBtn: "Atualizar"}) %>
             <% } %>
         </header>
         <section id="task-list">
-            <ul>
-                <% taskList.forEach((loop_task) => {%>
-                <li class="check-<%= loop_task.check %>">
-                    <div>
-                        <a
-                            href="/updateStatus/<%= loop_task._id %>"
-                            class="check-<%= loop_task.check %>"
-                        >
-                            <%= loop_task.task %>
-                        </a>
-                        <span>
-                            Adicionada em: <%=
-                            loop_task.date.toLocaleDateString("pt-BR")%>
-                        </span>
-                    </div>
-                    <div>
-                        <a
-                            class="btn-update"
-                            href="/getById/<%= loop_task._id %>/update"
-                            ><i class="bi bi-pencil-square"></i
-                        ></a>
-                        <a
-                            class="btn-delete"
-                            href="/getById/<%= loop_task._id %>/delete"
-                            ><i class="bi bi-trash"></i
-                        ></a>
-                    </div>
-                </li>
-                <% }) %>
-            </ul>
-        </section>
+            <!--Carregar lista de tarefas-->
+            <% if (taskList.length > 0) { %>
+                <%- include("./components/tasksDisplay", {list: taskList}) %>
 
+            <% } else { %>
+                <h3>Nenhuma tarefa adicionada.</h3>
+            <% } %>
+        </section>
         <% if(taskDelete != null) {%>
-
-        <section id="modal">
-            <div id="card">
-                <div id="window-head">
-                    <h2>Confirmação</h2>
-                    <a id="close-btn" href="/"><i class="bi bi-x"></i></a>
-                </div>
-                <hr />
-                <p>
-                    Deseja realmente apagar a tarefa "<%= taskDelete.task %>"?
-                </p>
-                <div id="btns">
-                    <a id="btn-not" href="/">Não</a>
-                    <a id="btn-yes" href="/delete/<%= taskDelete._id %>">Sim</a>
-                </div>
-            </div>
-        </section>
-
+            <%- include('./components/deleteModal') %>
         <% } %>
     </body>
 </html>
