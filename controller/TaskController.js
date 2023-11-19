@@ -24,8 +24,6 @@ const getAllTasks = async (req, res) => {
 const createTask = async (req, res) => {
     const task = req.body;
 
-    console.log(task);
-
     if (!task.task) {
         message = "Tarefa inválida";
         type = "danger";
@@ -85,9 +83,20 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
     try {
-        await Task.deleteOne({ task: req.params.task });
+        await Task.deleteOne({ _id: req.params.id });
         message = "Tarefa deletada com sucesso";
         type = "sucess";
+        res.redirect("/");
+    } catch (err) {
+        res.status(500).send({ error: err.message });
+    }
+};
+
+const taskStatus = async (req, res) => {
+    try {
+        const task = await Task.findOne({ _id: req.params.id });
+        task.check = !task.check;
+        await Task.updateOne({ _id: req.params.id }, task);
         res.redirect("/");
     } catch (err) {
         res.status(500).send({ error: err.message });
@@ -100,4 +109,5 @@ module.exports = {
     getById,
     updateTask,
     deleteTask,
+    taskStatus,
 };

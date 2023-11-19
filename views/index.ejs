@@ -49,9 +49,14 @@
         <section id="task-list">
             <ul>
                 <% taskList.forEach((loop_task) => {%>
-                <li>
+                <li class="check-<%= loop_task.check %>">
                     <div>
-                        <a href="/"> <%= loop_task.task %> </a>
+                        <a
+                            href="/updateStatus/<%= loop_task._id %>"
+                            class="check-<%= loop_task.check %>"
+                        >
+                            <%= loop_task.task %>
+                        </a>
                         <span>
                             Adicionada em: <%=
                             loop_task.date.toLocaleDateString("pt-BR")%>
@@ -88,9 +93,7 @@
                 </p>
                 <div id="btns">
                     <a id="btn-not" href="/">Não</a>
-                    <a id="btn-yes" href="/delete/<%= taskDelete.task %>"
-                        >Sim</a
-                    >
+                    <a id="btn-yes" href="/delete/<%= taskDelete._id %>">Sim</a>
                 </div>
             </div>
         </section>
