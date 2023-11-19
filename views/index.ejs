@@ -5,12 +5,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Task List</title>
         <link rel="stylesheet" href="/style.css" />
+        <script src="/script.js" defer></script>
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
         />
     </head>
     <body>
+        <% if (message != "") { %>
+        <section class="message message-<%= type %>">
+            <p><%= message %></p>
+            <span id="close-message"><i class="bi bi-x"></i></span>
+        </section>
+        <% } %>
+
         <header>
             <% if (task == null) {%>
             <h1>TASK LIST</h1>
@@ -68,19 +76,21 @@
 
         <% if(taskDelete != null) {%>
 
-        <section id="modal"> 
+        <section id="modal">
             <div id="card">
                 <div id="window-head">
                     <h2>Confirmação</h2>
-                    <a id="close-btn" href="/"
-                        ><i class="bi bi-x"></i></i
-                    ></a>
+                    <a id="close-btn" href="/"><i class="bi bi-x"></i></a>
                 </div>
                 <hr />
-                <p>Deseja realmente apagar a tarefa "<%= taskDelete.task %>"?</p>
-                <div id ="btns">
+                <p>
+                    Deseja realmente apagar a tarefa "<%= taskDelete.task %>"?
+                </p>
+                <div id="btns">
                     <a id="btn-not" href="/">Não</a>
-                    <a id="btn-yes" href="/delete/<%= taskDelete.task %>">Sim</a>
+                    <a id="btn-yes" href="/delete/<%= taskDelete.task %>"
+                        >Sim</a
+                    >
                 </div>
             </div>
         </section>
